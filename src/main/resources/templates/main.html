@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>Bobel</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+<body>
+<div class="container">
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Bobel</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link"  href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link"  href="/main">Main</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link"  href="/user">User list</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <form th:action="@{/logout}" method="post">
+            <div class="navbar-text mr-3">
+                <button class="btn btn-primary" type="submit">Sign out</button>
+            </div>
+        </form>
+    </nav>
+    <div>
+        <h3 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h3>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <form th:action="@{/main}" method="get" class="form-inline">
+                <input type="text" class="form-control" name="filter" placeholder="Search by breed" th:value="*{filter}">
+                <button type="submit" class="btn btn-primary ml-2">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+        Add new pets
+    </a>
+    <div class="collapse" id="collapseExample">
+        <div class="form-group mt-3">
+            <form th:action="@{/main}" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <input type="text" class="form-control" name="petName" placeholder="Add name for you pet">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="breed" placeholder="Add breed for you dog">
+                </div>
+                <div class="form-group">
+                    <div class="custom-file">
+                        <input type="file" name="file" id="customFile">
+                        <label class="custom-file-label" for="customFile">Choose photo</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="container mt-5" >
+        <h3>Your pets</h3>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+
+    <div class="card my-3">
+        <div th:each="pet : ${pets}">
+                <td th:if = "${pet.filename}"></td>
+                <img th:src = "@{/img/{filename}(filename=${pet.filename})}"/>
+                <div class="m-2">
+                    <td th:text="${pet.petName}"></td>
+                    <td th:text="${pet.breed}"></td>
+                </div>
+                <div class="card-footer text-muted">
+                    <strong th:text="${pet.ownerName}"></strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
